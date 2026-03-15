@@ -25,7 +25,11 @@ public class AuthController {
     }
 
     @PostMapping("/login")
+<<<<<<< HEAD
     public ResponseEntity<?> login(@RequestBody AuthRequest request) {
+=======
+    public AuthResponse login(@RequestBody AuthRequest request) {
+>>>>>>> c81c9ddbeb09b0cf2200c80b347f0868ed3d0755
 
         try {
 
