@@ -22,7 +22,7 @@ public class AuthController {
         this.jwtUtil = jwtUtil;
     }
 
-    @PostMapping("/auth/login")
+    @PostMapping("/login")
     public AuthResponse login(@RequestBody AuthRequest request) {
 
         Authentication authentication =
