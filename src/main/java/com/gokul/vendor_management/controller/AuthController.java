@@ -4,6 +4,8 @@ import com.gokul.vendor_management.config.JwtUtil;
 import com.gokul.vendor_management.dto.AuthRequest;
 import com.gokul.vendor_management.dto.AuthResponse;
 import com.gokul.vendor_management.dto.LoginRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,19 +24,28 @@ public class AuthController {
         this.jwtUtil = jwtUtil;
     }
 
-    @PostMapping("/auth/login")
-    public AuthResponse login(@RequestBody AuthRequest request) {
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody AuthRequest request) {
 
-        Authentication authentication =
-                authenticationManager.authenticate(
-                        new UsernamePasswordAuthenticationToken(
-                                request.getUsername(),
-                                request.getPassword()
-                        )
-                );
+        try {
 
-        String token = jwtUtil.generateToken(request.getUsername());
+            Authentication authentication =
+                    authenticationManager.authenticate(
+                            new UsernamePasswordAuthenticationToken(
+                                    request.getUsername(),
+                                    request.getPassword()
+                            )
+                    );
 
-        return new AuthResponse(token);
+            String token = jwtUtil.generateToken(request.getUsername());
+
+            return ResponseEntity.ok(new AuthResponse(token));
+
+        } catch (Exception e) {
+
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body("Invalid username or password");
+        }
     }
 }
